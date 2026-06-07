@@ -35,10 +35,56 @@ func _ready():
 		
 func _process(delta):
 
-	var population = get_tree().get_nodes_in_group("creature").size()
+	var creatures = get_tree().get_nodes_in_group("creature")
+
+	var population = creatures.size()
 	var food_count = get_tree().get_nodes_in_group("food").size()
+	var bush_count = get_tree().get_nodes_in_group("bush").size()
+
+	var avg_speed = 0.0
+	var avg_vision = 0.0
+	var avg_reproduction = 0.0
+
+	var max_generation = 0
+	var oldest_age = 0.0
+
+	for creature in creatures:
+
+		avg_speed += creature.speed
+		avg_vision += creature.vision_radius
+		avg_reproduction += creature.reproduction_threshold
+
+		max_generation = max(
+			max_generation,
+			creature.generation
+		)
+
+		oldest_age = max(
+			oldest_age,
+			creature.age
+		)
+
+	if population > 0:
+		avg_speed /= population
+		avg_vision /= population
+		avg_reproduction /= population
 
 	stats_label.text = (
-		"Population: %d\nFood: %d\nWorld: 1000x1000"
-		% [population, food_count]
-	)
+		"Population: %d\n" +
+		"Food: %d\n" +
+		"Bushes: %d\n\n" +
+		"Avg Speed: %.1f\n" +
+		"Avg Vision: %.1f\n" +
+		"Avg Repro: %.1f\n\n" +
+		"Highest Gen: %d\n" +
+		"Oldest Age: %.1f"
+	) % [
+		population,
+		food_count,
+		bush_count,
+		avg_speed,
+		avg_vision,
+		avg_reproduction,
+		max_generation,
+		oldest_age
+	]
