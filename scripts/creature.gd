@@ -1,4 +1,7 @@
 extends CharacterBody2D
+# ART
+@onready var sprite = $Sprite2D
+
 
 var direction: Vector2
 var change_timer := 0.0
@@ -9,9 +12,9 @@ var age := 0.0
 var generation := 0
 
 # GENES:
-var speed := 100.0
-var vision_radius := 150.0
-var reproduction_threshold := 200.0
+var speed := 50.0
+var vision_radius := 100.0
+var reproduction_threshold := 500.0
 
 
 func _ready():
@@ -74,6 +77,12 @@ func find_nearest_food():
 
 
 func _physics_process(delta):
+	
+	var r = clamp(speed / 200.0, 0.0, 1.0)
+	var g = clamp(vision_radius / 300.0, 0.0, 1.0)
+	var b = clamp(generation / 50.0, 0.2, 1.0)
+
+	sprite.modulate = Color(r, g, b)
 
 	# Lose energy over time
 	age += delta
@@ -95,6 +104,7 @@ func _physics_process(delta):
 			randf_range(-1, 1),
 			randf_range(-1, 1)
 		).normalized()
+		rotation = direction.angle()
 
 	# Find food
 	var target = find_nearest_food()
@@ -136,15 +146,15 @@ func _physics_process(delta):
 	if energy > reproduction_threshold:
 		reproduce()
 	
-	queue_redraw()
-
-func _draw():
-
-	var r = clamp(speed / 200.0, 0.0, 1.0)
-	var g = clamp(vision_radius / 300.0, 0.0, 1.0)
-
-	draw_circle(
-		Vector2.ZERO,
-		10,
-		Color(r, g, 1.0)
-	)
+	#queue_redraw()
+#
+#func _draw():
+#
+	#var r = clamp(speed / 200.0, 0.0, 1.0)
+	#var g = clamp(vision_radius / 300.0, 0.0, 1.0)
+#
+	#draw_circle(
+		#Vector2.ZERO,
+		#10,
+		#Color(r, g, 1.0)
+	#)

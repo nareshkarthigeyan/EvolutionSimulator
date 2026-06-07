@@ -9,6 +9,10 @@ const WORLD_HEIGHT = 1000
 
 
 func _ready():
+
+	queue_redraw()
+
+	# existing spawn code...
 	for i in range(20):
 		var creature = creature_scene.instantiate()
 
@@ -34,7 +38,22 @@ func _ready():
 
 		add_child(bush)
 
+func _draw():
 
+	# grass
+	draw_rect(
+		Rect2(0, 0, WORLD_WIDTH, WORLD_HEIGHT),
+		Color(0.25, 0.6, 0.25)
+	)
+
+	# border
+	draw_rect(
+		Rect2(0, 0, WORLD_WIDTH, WORLD_HEIGHT),
+		Color.BLACK,
+		false,
+		8
+	)
+	
 func _process(_delta):
 	var creatures = get_tree().get_nodes_in_group("creature")
 

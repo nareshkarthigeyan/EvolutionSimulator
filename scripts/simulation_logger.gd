@@ -33,7 +33,7 @@ func _ready():
 
 func _process(delta):
 	timer += delta
-	if timer < 1.0:
+	if timer < 0.5:
 		return
 
 	timer = 0.0

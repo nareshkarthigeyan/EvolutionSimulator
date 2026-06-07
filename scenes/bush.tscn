@@ -2,7 +2,11 @@
 
 [ext_resource type="Script" uid="uid://b07ldfrtcfj1l" path="res://scripts/bush.gd" id="1_8cy4n"]
 [ext_resource type="PackedScene" uid="uid://wnp87uey2wv1" path="res://scenes/food.tscn" id="2_28u5p"]
+[ext_resource type="Texture2D" uid="uid://bxwarndanwuy2" path="res://sprites/bush.png" id="3_tu87o"]
 
 [node name="Bush" type="Node2D" unique_id=1013619711]
 script = ExtResource("1_8cy4n")
 food_scene = ExtResource("2_28u5p")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1706454747]
+texture = ExtResource("3_tu87o")

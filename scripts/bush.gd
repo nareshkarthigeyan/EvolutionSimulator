@@ -6,7 +6,7 @@ var timer := 0.0
 
 func _ready():
 	add_to_group("bush")
-	queue_redraw()
+	#queue_redraw()
 
 func _process(delta):
 
@@ -33,5 +33,5 @@ func _process(delta):
 
 			add_child(food)
 
-func _draw():
-	draw_circle(Vector2.ZERO, 15, Color.DARK_GREEN)
+#func _draw():
+	#draw_circle(Vector2.ZERO, 15, Color.DARK_GREEN)

@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://c4p6pvpmt6b26" path="res://scenes/creature.tscn" id="2_k0juu"]
 [ext_resource type="PackedScene" uid="uid://cn5is336uspf3" path="res://scenes/bush.tscn" id="3_71j4m"]
 [ext_resource type="Script" uid="uid://c38fv22k8jqk3" path="res://scripts/simulation_logger.gd" id="4_k0juu"]
+[ext_resource type="Script" uid="uid://drvbtncceti2d" path="res://scenes/camera_2d.gd" id="5_71j4m"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_tlwt5"]
 
@@ -23,3 +24,6 @@ label_settings = SubResource("LabelSettings_tlwt5")
 
 [node name="SimulationLogger" type="Node" parent="." unique_id=691649716]
 script = ExtResource("4_k0juu")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=163744172]
+script = ExtResource("5_71j4m")
