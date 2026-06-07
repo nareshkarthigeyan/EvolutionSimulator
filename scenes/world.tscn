@@ -12,6 +12,8 @@ creature_scene = ExtResource("2_k0juu")
 bush_scene = ExtResource("3_71j4m")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=494989610]
+offset = Vector2(10, 10)
+transform = Transform2D(1, 0, 0, 1, 10, 10)
 
 [node name="StatsLabel" type="Label" parent="CanvasLayer" unique_id=201762445]
 offset_right = 40.0
