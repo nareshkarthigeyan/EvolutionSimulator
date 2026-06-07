@@ -7,6 +7,7 @@ extends Node2D
 const WORLD_WIDTH = 1000
 const WORLD_HEIGHT = 1000
 
+
 func _ready():
 	for i in range(20):
 		var creature = creature_scene.instantiate()
@@ -22,7 +23,7 @@ func _ready():
 
 	print("Creature count after spawn:",
 		get_tree().get_nodes_in_group("creature").size())
-	
+
 	for i in range(15):
 		var bush = bush_scene.instantiate()
 
@@ -32,9 +33,9 @@ func _ready():
 		)
 
 		add_child(bush)
-		
-func _process(delta):
 
+
+func _process(_delta):
 	var creatures = get_tree().get_nodes_in_group("creature")
 
 	var population = creatures.size()
@@ -49,7 +50,6 @@ func _process(delta):
 	var oldest_age = 0.0
 
 	for creature in creatures:
-
 		avg_speed += creature.speed
 		avg_vision += creature.vision_radius
 		avg_reproduction += creature.reproduction_threshold

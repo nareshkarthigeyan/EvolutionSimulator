@@ -51,6 +51,8 @@ func reproduce():
 	child.generation = generation + 1
 	
 	get_parent().add_child(child)
+	
+	SimulationStats.births += 1
 
 	energy *= 0.5
 
@@ -79,6 +81,7 @@ func _physics_process(delta):
 
 	# Die if energy runs out
 	if energy <= 0:
+		SimulationStats.deaths += 1
 		queue_free()
 		return
 
@@ -106,6 +109,9 @@ func _physics_process(delta):
 
 	# Eat food
 	if target and global_position.distance_to(target.global_position) < 10:
+
+		SimulationStats.food_eaten += 1
+
 		target.queue_free()
 		energy += 50
 
