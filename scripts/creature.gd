@@ -2,8 +2,11 @@ extends CharacterBody2D
 
 var direction: Vector2
 var change_timer := 0.0
-
 var energy := 100.0
+
+# PROPERTIES
+var age := 0.0
+var generation := 0
 
 # GENES:
 var speed := 100.0
@@ -44,7 +47,9 @@ func reproduce():
 	child.speed = max(child.speed, 20)
 	child.vision_radius = max(child.vision_radius, 20)
 	child.reproduction_threshold = max(child.reproduction_threshold, 50)
-
+	
+	child.generation = generation + 1
+	
 	get_parent().add_child(child)
 
 	energy *= 0.5
@@ -69,6 +74,7 @@ func find_nearest_food():
 func _physics_process(delta):
 
 	# Lose energy over time
+	age += delta
 	energy -= delta * 10
 
 	# Die if energy runs out
