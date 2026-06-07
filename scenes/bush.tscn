@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cn5is336uspf3"]
+
+[ext_resource type="Script" uid="uid://b07ldfrtcfj1l" path="res://scripts/bush.gd" id="1_8cy4n"]
+[ext_resource type="PackedScene" uid="uid://wnp87uey2wv1" path="res://scenes/food.tscn" id="2_28u5p"]
+
+[node name="Bush" type="Node2D" unique_id=1013619711]
+script = ExtResource("1_8cy4n")
+food_scene = ExtResource("2_28u5p")

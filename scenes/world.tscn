@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://cd2bi7ye6pcvg"]
+
+[ext_resource type="Script" uid="uid://bqfnmd7ety1di" path="res://scripts/world.gd" id="1_4wyf3"]
+[ext_resource type="PackedScene" uid="uid://c4p6pvpmt6b26" path="res://scenes/creature.tscn" id="2_k0juu"]
+[ext_resource type="PackedScene" uid="uid://cn5is336uspf3" path="res://scenes/bush.tscn" id="3_71j4m"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_tlwt5"]
+
+[node name="World" type="Node2D" unique_id=402015672]
+script = ExtResource("1_4wyf3")
+creature_scene = ExtResource("2_k0juu")
+bush_scene = ExtResource("3_71j4m")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=494989610]
+
+[node name="StatsLabel" type="Label" parent="CanvasLayer" unique_id=201762445]
+offset_right = 40.0
+offset_bottom = 23.0
+label_settings = SubResource("LabelSettings_tlwt5")
