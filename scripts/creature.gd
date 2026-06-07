@@ -1,20 +1,23 @@
 extends CharacterBody2D
 # ART
 @onready var sprite = $Sprite2D
-
+const SECONDS_PER_YEAR := 10.0
 
 var direction: Vector2
 var change_timer := 0.0
 var energy := 100.0
+var reproduction_cooldown := 0.0
 
 # PROPERTIES
 var age := 0.0
 var generation := 0
+var age_years := age / 10.0
 
 # GENES:
-var speed := 50.0
-var vision_radius := 100.0
-var reproduction_threshold := 500.0
+var speed := 150.0
+var vision_radius := 150.0
+var reproduction_threshold := 400.0
+var max_age_years := 80.0
 
 
 func _ready():
@@ -57,7 +60,8 @@ func reproduce():
 	
 	SimulationStats.births += 1
 
-	energy *= 0.5
+	energy -= reproduction_threshold
+	energy = max(energy, 5.0)
 
 
 func find_nearest_food():
@@ -77,24 +81,33 @@ func find_nearest_food():
 
 
 func _physics_process(delta):
-	
+
 	var r = clamp(speed / 200.0, 0.0, 1.0)
 	var g = clamp(vision_radius / 300.0, 0.0, 1.0)
 	var b = clamp(generation / 50.0, 0.2, 1.0)
 
 	sprite.modulate = Color(r, g, b)
 
-	# Lose energy over time
+	# Timers
+	reproduction_cooldown -= delta
+
+	# Aging & Energy
 	age += delta
 	energy -= delta * 10
 
-	# Die if energy runs out
+	# Starvation death
 	if energy <= 0:
 		SimulationStats.deaths += 1
 		queue_free()
 		return
 
-	# Random wandering timer
+	# Old age death
+	if age > max_age_years * SECONDS_PER_YEAR:
+		SimulationStats.deaths += 1
+		queue_free()
+		return
+
+	# Random wandering
 	change_timer -= delta
 
 	if change_timer <= 0:
@@ -104,14 +117,19 @@ func _physics_process(delta):
 			randf_range(-1, 1),
 			randf_range(-1, 1)
 		).normalized()
-		rotation = direction.angle()
 
 	# Find food
 	var target = find_nearest_food()
 
 	# Chase food
 	if target:
-		direction = (target.global_position - global_position).normalized()
+		direction = (
+			target.global_position - global_position
+		).normalized()
+
+	# Face movement direction
+	if direction.length() > 0:
+		rotation = direction.angle()
 
 	# Move
 	velocity = direction * speed
@@ -122,10 +140,27 @@ func _physics_process(delta):
 
 		SimulationStats.food_eaten += 1
 
-		target.queue_free()
-		energy += 50
+		if target.age < target.ripe_age:
 
-	# Bounce off world boundaries
+			# Unripe fruit
+			energy += 10
+
+		elif target.age < target.rotten_age:
+
+			# Perfectly ripe fruit
+			energy += 50
+
+		else:
+
+			# Rotten fruit
+			if randf() < 0.7:
+				energy -= 30
+			else:
+				energy += 5
+
+		target.queue_free()
+
+	# World bounds
 	if position.x < 0:
 		position.x = 0
 		direction.x *= -1
@@ -142,19 +177,19 @@ func _physics_process(delta):
 		position.y = 1000
 		direction.y *= -1
 
-	# Reproduce
-	if energy > reproduction_threshold:
-		reproduce()
-	
-	#queue_redraw()
-#
-#func _draw():
-#
-	#var r = clamp(speed / 200.0, 0.0, 1.0)
-	#var g = clamp(vision_radius / 300.0, 0.0, 1.0)
-#
-	#draw_circle(
-		#Vector2.ZERO,
-		#10,
-		#Color(r, g, 1.0)
-	#)
+	# Reproduction
+	var fertility = 1.0 - (
+		age / (max_age_years * SECONDS_PER_YEAR)
+	)
+	fertility = clamp(fertility, 0.0, 1.0)
+
+	if (
+		energy > reproduction_threshold
+		and reproduction_cooldown <= 0.0
+	):
+
+		if randf() < fertility:
+
+			reproduce()
+
+			reproduction_cooldown = 5.0

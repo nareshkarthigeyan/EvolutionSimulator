@@ -26,4 +26,5 @@ label_settings = SubResource("LabelSettings_tlwt5")
 script = ExtResource("4_k0juu")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=163744172]
+offset = Vector2(500, 500)
 script = ExtResource("5_71j4m")

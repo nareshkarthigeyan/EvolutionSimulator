@@ -7,6 +7,9 @@ extends Node2D
 const WORLD_WIDTH = 1000
 const WORLD_HEIGHT = 1000
 
+var simulation_time := 0.0
+
+const SECONDS_PER_YEAR := 10.0
 
 func _ready():
 
@@ -55,6 +58,8 @@ func _draw():
 	)
 	
 func _process(_delta):
+	simulation_time += _delta
+	var year = int(simulation_time / SECONDS_PER_YEAR)
 	var creatures = get_tree().get_nodes_in_group("creature")
 
 	var population = creatures.size()
@@ -89,21 +94,16 @@ func _process(_delta):
 		avg_reproduction /= population
 
 	stats_label.text = (
-		"Population: %d\n" +
-		"Food: %d\n" +
-		"Bushes: %d\n\n" +
-		"Avg Speed: %.1f\n" +
-		"Avg Vision: %.1f\n" +
-		"Avg Repro: %.1f\n\n" +
-		"Highest Gen: %d\n" +
-		"Oldest Age: %.1f"
-	) % [
-		population,
-		food_count,
-		bush_count,
-		avg_speed,
-		avg_vision,
-		avg_reproduction,
-		max_generation,
-		oldest_age
-	]
+	"Year: %d\n" +
+	"Population: %d\n" +
+	"Food: %d\n" +
+	"Bushes: %d\n" +
+	"World: %dx%d"
+) % [
+	year,
+	population,
+	food_count,
+	bush_count,
+	WORLD_WIDTH,
+	WORLD_HEIGHT
+]

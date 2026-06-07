@@ -1,6 +1,6 @@
 extends Camera2D
 
-const MOVE_SPEED = 800.0
+const MOVE_SPEED = 100.0
 const ZOOM_SPEED = 0.03
 
 @export var world_width := 1000
