@@ -24,7 +24,7 @@ func _ready():
 		return
 
 	file.store_line(
-		"epoch,population,food,bushes,avg_speed,avg_vision,avg_reproduction,max_generation,oldest_age,births,deaths,food_eaten"
+		"epoch,year,population,food,bushes,water,avg_speed,avg_vision,avg_reproduction,avg_hunger,avg_thirst,max_generation,oldest_age,oldest_bush_age,births,deaths,food_eaten,seeds_found,seeds_planted,seeds_held"
 	)
 
 	print("Logging to:", filename)
@@ -47,22 +47,31 @@ func log_epoch():
 		return
 
 	var creatures = get_tree().get_nodes_in_group("creature")
+	var bushes = get_tree().get_nodes_in_group("bush")
 
 	var population = creatures.size()
 	var food_count = get_tree().get_nodes_in_group("food").size()
-	var bush_count = get_tree().get_nodes_in_group("bush").size()
+	var bush_count = bushes.size()
+	var water_count = get_tree().get_nodes_in_group("water").size()
 
 	var avg_speed = 0.0
 	var avg_vision = 0.0
 	var avg_reproduction = 0.0
+	var avg_hunger = 0.0
+	var avg_thirst = 0.0
 	var max_generation = 0
 	var oldest_age = 0.0
+	var oldest_bush_age = 0.0
+	var seeds_held = 0
 
 	for creature in creatures:
 
 		avg_speed += creature.speed
 		avg_vision += creature.vision_radius
 		avg_reproduction += creature.reproduction_threshold
+		avg_hunger += creature.hunger
+		avg_thirst += creature.thirst
+		seeds_held += creature.seeds
 
 		max_generation = max(
 			max_generation,
@@ -71,29 +80,45 @@ func log_epoch():
 
 		oldest_age = max(
 			oldest_age,
-			creature.age
+			creature.age_years
+		)
+
+	for bush in bushes:
+		oldest_bush_age = max(
+			oldest_bush_age,
+			bush.age_years
 		)
 
 	if population > 0:
 		avg_speed /= population
 		avg_vision /= population
 		avg_reproduction /= population
+		avg_hunger /= population
+		avg_thirst /= population
 
 	file.store_line(
-		"%d,%d,%d,%d,%.2f,%.2f,%.2f,%d,%.2f,%d,%d,%d"
+		"%d,%.2f,%d,%d,%d,%d,%.2f,%.2f,%.2f,%.2f,%.2f,%d,%.2f,%.2f,%d,%d,%d,%d,%d,%d"
 		% [
 			epoch,
+			SimulationTime.elapsed_years(),
 			population,
 			food_count,
 			bush_count,
+			water_count,
 			avg_speed,
 			avg_vision,
 			avg_reproduction,
+			avg_hunger,
+			avg_thirst,
 			max_generation,
 			oldest_age,
+			oldest_bush_age,
 			SimulationStats.births,
 			SimulationStats.deaths,
-			SimulationStats.food_eaten
+			SimulationStats.food_eaten,
+			SimulationStats.seeds_found,
+			SimulationStats.seeds_planted,
+			seeds_held
 		]
 	)
 

@@ -3,12 +3,33 @@ extends Node2D
 @export var food_scene: PackedScene
 
 var timer := 0.0
+var age_seconds := 0.0
+var age_years := 0.0
+var age := 0.0
+var lifespan_years := 2.0
+
+@onready var sprite = $Sprite2D
 
 func _ready():
 	add_to_group("bush")
 	#queue_redraw()
 
 func _process(delta):
+	age_seconds += delta
+	age_years = SimulationTime.seconds_to_years(age_seconds)
+	age = age_years
+
+	if sprite:
+		var life_ratio = clamp(age_years / lifespan_years, 0.0, 1.0)
+		sprite.modulate = Color(
+			1.0,
+			1.0 - life_ratio * 0.35,
+			1.0 - life_ratio * 0.65
+		)
+
+	if age_years >= lifespan_years:
+		queue_free()
+		return
 
 	timer -= delta
 

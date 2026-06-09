@@ -4,7 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://c4p6pvpmt6b26" path="res://scenes/creature.tscn" id="2_k0juu"]
 [ext_resource type="PackedScene" uid="uid://cn5is336uspf3" path="res://scenes/bush.tscn" id="3_71j4m"]
 [ext_resource type="Script" uid="uid://c38fv22k8jqk3" path="res://scripts/simulation_logger.gd" id="4_k0juu"]
-[ext_resource type="Script" uid="uid://drvbtncceti2d" path="res://scenes/camera_2d.gd" id="5_71j4m"]
+[ext_resource type="PackedScene" uid="uid://bbw5bn5ocgiwg" path="res://scenes/water.tscn" id="4_qfnet"]
+[ext_resource type="Script" uid="uid://drvbtncceti2d" path="res://scripts/camera_2d.gd" id="5_71j4m"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_tlwt5"]
 
@@ -12,6 +13,7 @@
 script = ExtResource("1_4wyf3")
 creature_scene = ExtResource("2_k0juu")
 bush_scene = ExtResource("3_71j4m")
+water_scene = ExtResource("4_qfnet")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=494989610]
 offset = Vector2(10, 10)
