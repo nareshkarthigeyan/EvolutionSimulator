@@ -1,0 +1,5 @@
+epoch,year,population,food,bushes,water,avg_generation,max_generation,avg_memory,avg_speed,avg_vision,avg_age,avg_hunger,avg_thirst,oldest_age,oldest_bush_age,births,deaths,food_eaten,seeds_found,seeds_planted,seeds_held
+1,0.05,1,15,15,3,0.00,0,0.000,80.00,150.00,0.05,97.50,96.00,0.05,0.05,0,0,0,0,0,0
+2,0.10,1,15,15,3,0.00,0,0.000,80.00,150.00,0.10,94.92,91.87,0.10,0.10,0,0,0,0,0,0
+3,0.15,1,15,15,3,0.00,0,0.000,80.00,150.00,0.15,92.33,87.73,0.15,0.15,0,0,0,0,0,0
+4,0.21,1,15,15,3,0.00,0,0.000,80.00,150.00,0.20,89.75,83.60,0.20,0.20,0,0,0,0,0,0

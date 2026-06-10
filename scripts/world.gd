@@ -42,7 +42,7 @@ func _ready():
 	queue_redraw()
 	spawn_water_regions()
 
-	for i in range(20):
+	for i in range(150):
 		var creature = creature_scene.instantiate()
 		creature.position = random_land_position()
 		add_child(creature)
@@ -52,7 +52,7 @@ func _ready():
 	print("Creature count after spawn:",
 		get_tree().get_nodes_in_group("creature").size())
 
-	spawn_initial_bushes(15)
+	spawn_initial_bushes(25)
 
 
 func setup_terrain():
@@ -314,69 +314,137 @@ func _process(_delta):
 
 	var avg_speed = 0.0
 	var avg_vision = 0.0
-	var avg_reproduction = 0.0
 	var avg_hunger = 0.0
 	var avg_thirst = 0.0
-
+	var avg_generation = 0.0
+	var avg_memory = 0.0
+	var avg_age = 0.0
 	var max_generation = 0
 	var oldest_age = 0.0
 	var oldest_bush_age = 0.0
 	var seeds_held = 0
+	var debug_creature = null
 
 	for creature in creatures:
 		avg_speed += creature.speed
 		avg_vision += creature.vision_radius
-		avg_reproduction += creature.reproduction_threshold
 		avg_hunger += creature.hunger
 		avg_thirst += creature.thirst
+		avg_generation += creature.generation
+		avg_memory += creature.memory
+		avg_age += creature.age_years
 		seeds_held += creature.seeds
 
-		max_generation = max(
-			max_generation,
-			creature.generation
-		)
+		max_generation = max(max_generation, creature.generation)
 
-		oldest_age = max(
-			oldest_age,
-			creature.age_years
-		)
+		if debug_creature == null or creature.generation > debug_creature.generation:
+			debug_creature = creature
+
+		oldest_age = max(oldest_age, creature.age_years)
 
 	for bush in bushes:
-		oldest_bush_age = max(
-			oldest_bush_age,
-			bush.age_years
-		)
+		oldest_bush_age = max(oldest_bush_age, bush.age_years)
 
 	if population > 0:
 		avg_speed /= population
 		avg_vision /= population
-		avg_reproduction /= population
 		avg_hunger /= population
 		avg_thirst /= population
+		avg_generation /= population
+		avg_memory /= population
+		avg_age /= population
+
+	var debug_generation = 0
+	var debug_memory = 0.0
+	var debug_lineage = 0
+	var debug_outputs = [0.0, 0.0, 0.0, 0.0, 0.0]
+	var debug_reproduction_drive = 0.0
+	var debug_plant_drive = 0.0
+	var debug_sees_food = false
+	var debug_sees_water = false
+
+	if debug_creature != null:
+		debug_generation = debug_creature.generation
+		debug_memory = debug_creature.memory
+		debug_lineage = debug_creature.lineage_id
+		debug_outputs = debug_creature.brain_outputs
+		debug_reproduction_drive = debug_creature.reproduction_drive
+		debug_plant_drive = debug_creature.plant_drive
+		debug_sees_food = debug_creature.sees_food
+		debug_sees_water = debug_creature.sees_water
 
 	stats_label.text = (
-	"World Age: %.1f years\n" +
-	"Population: %d\n" +
-	"Food: %d\n" +
-	"Bushes: %d\n" +
-	"Water: %d\n" +
-	"Seeds Held: %d\n" +
-	"Avg Hunger: %.1f\n" +
-	"Avg Thirst: %.1f\n\n" +
-	"Oldest Creature: %.1f years\n" +
-	"Oldest Bush: %.1f years\n" +
-	"World: %dx%d"
-) % [
-	year,
-	population,
-	food_count,
-	bush_count,
-	water_count,
-	seeds_held,
-	avg_hunger,
-	avg_thirst,
-	oldest_age,
-	oldest_bush_age,
-	WORLD_WIDTH,
-	WORLD_HEIGHT
-]
+		"World Age: %.1f years\n" +
+		"Population: %d\n" +
+		"Avg Generation: %.1f\n" +
+		"Max Generation: %d\n" +
+		"Avg Memory: %.2f\n" +
+		"Avg Speed: %.1f\n" +
+		"Avg Vision: %.1f\n" +
+		"Avg Age: %.1f years\n" +
+		"Food: %d\n" +
+		"Bushes: %d\n" +
+		"Water: %d\n" +
+		"Seeds Held: %d\n" +
+		"Avg Hunger: %.1f\n" +
+		"Avg Thirst: %.1f\n\n" +
+		"Births: %d (%d total)\n" +
+		"Deaths: %d (%d total)\n" +
+		"Food Eaten: %d (%d total)\n" +
+		"Seeds Planted: %d (%d total)\n\n" +
+		"Debug Lineage: %d\n" +
+		"Debug Generation: %d\n" +
+		"Debug Memory: %.2f\n" +
+		"Sees Food: %s\n" +
+		"Sees Water: %s\n" +
+		"Repro Drive: %.2f\n" +
+		"Plant Drive: %.2f\n" +
+		"Brain Outputs:\n" +
+		"  Move X: %.2f\n" +
+		"  Move Y: %.2f\n" +
+		"  Reproduce: %.2f\n" +
+		"  Plant Seed: %.2f\n" +
+		"  Explore: %.2f\n\n" +
+		"Oldest Creature: %.1f years\n" +
+		"Oldest Bush: %.1f years\n" +
+		"World: %dx%d"
+	) % [
+		year,
+		population,
+		avg_generation,
+		max_generation,
+		avg_memory,
+		avg_speed,
+		avg_vision,
+		avg_age,
+		food_count,
+		bush_count,
+		water_count,
+		seeds_held,
+		avg_hunger,
+		avg_thirst,
+		SimulationStats.births,
+		SimulationStats.total_births,
+		SimulationStats.deaths,
+		SimulationStats.total_deaths,
+		SimulationStats.food_eaten,
+		SimulationStats.total_food_eaten,
+		SimulationStats.seeds_planted,
+		SimulationStats.total_seeds_planted,
+		debug_lineage,
+		debug_generation,
+		debug_memory,
+		str(debug_sees_food),
+		str(debug_sees_water),
+		debug_reproduction_drive,
+		debug_plant_drive,
+		debug_outputs[0],
+		debug_outputs[1],
+		debug_outputs[2],
+		debug_outputs[3],
+		debug_outputs[4],
+		oldest_age,
+		oldest_bush_age,
+		WORLD_WIDTH,
+		WORLD_HEIGHT
+	]

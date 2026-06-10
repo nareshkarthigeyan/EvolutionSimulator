@@ -6,7 +6,7 @@ var timer := 0.0
 var age_seconds := 0.0
 var age_years := 0.0
 var age := 0.0
-var lifespan_years := 2.0
+var lifespan_years := 50.0
 
 @onready var sprite = $Sprite2D
 
